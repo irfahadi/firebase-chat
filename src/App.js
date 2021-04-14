@@ -109,7 +109,15 @@ class App extends Component {
     return firebase
       .database()
       .ref("/messages/")
-      .push(message)
+      .push({
+        id: message.id,
+        text: message.text,
+        user: {
+          avatar: this.state.user.photoURL,
+          id: this.state.user.uid,
+          name: this.state.user.displayName,
+        },
+      })
       .catch(function (error) {
         console.error("Error saving message to Database:", error);
       });
@@ -182,6 +190,7 @@ class App extends Component {
   render() {
     return (
       <div style={styles.container}>
+        {/* {console.log(this.state.user.photoURL)} */}
         {this.renderPopup()}
         <div style={styles.channelList}>
           {this.renderChannelsHeader()}
