@@ -13,6 +13,22 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 
+// const admin = require("firebase-admin");
+// const serviceAccount = require("./ServiceAccountKey.json");
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+// });
+// const uid = "SYZ83fHmRcTTSSBjQYDaXs07jg83";
+// let token = "";
+
+// admin
+//   .auth()
+//   .createCustomToken(uid)
+//   .then((costumToken) => {
+//     console.log(costumToken);
+//     token = costumToken;
+//   })
+//   .catch((error) => console.log(error));
 const config = {
   apiKey: "AIzaSyDFNCYcXTkcH1x8x_nijmK2Ln70GtXyOjk",
   authDomain: "chat-ea236.firebaseapp.com",
@@ -50,14 +66,26 @@ class App extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
+    firebase
+      .auth()
+      .signInWithCustomToken(
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTYxODY3MzYxNCwiZXhwIjoxNjE4Njc3MjE0LCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1sdWZlOUBjaGF0LWVhMjM2LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstbHVmZTlAY2hhdC1lYTIzNi5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6IlNZWjgzZkhtUmNUVFNTQmpRWURhWHMwN2pnODMifQ.hNAsdD78PpAIhivMXGc-uLLYVgcwDffryikH2kT5iNtG7iusUSJR9t0tS7f5yb-IhYJNcd8mM97OcmwHXly_R5jRsAiWwn-4dAPVukI4CRPMl_yZRKzQOIq10FBWkydJEEeRarN8k6ik7_XUbYJGv1fcCPsSZ_JYPw7caD-70rgO7hBfhOa5Hq07ikwfYC4ELmtcRgqmvDSbT3b4j7Amr7oOqaoTTJ6tuJ4UnMY3vgSi7bZnHEXE2QLbmkXiFWtcUhIRlX2WXpHWyAX1iDWnC8V97QLe-gZKI8rl9RmRnM6yyqcVzQc5rm9kdxBl1gHnfuCiI3j6dUHfl_O4j0EF-Q"
+      )
+      .then((userCredential) => {
+        // Signed in
+
+        var user = userCredential.user;
         this.setState({ isAuthenticated: true, user });
         this.loadMessages();
-      } else {
+        // ...
+      })
+      .catch((error) => {
+        // var errorCode = error.code;
+        // var errorMessage = error.message;
         this.setState({ isAuthenticated: false, user: {}, messages: [] });
-      }
-    });
+        console.log(error);
+        // ...
+      });
   }
 
   loadMessages() {
@@ -191,7 +219,7 @@ class App extends Component {
     return (
       <div style={styles.container}>
         {/* {console.log(this.state.user.photoURL)} */}
-        {this.renderPopup()}
+        {/* {this.renderPopup()} */}
         <div style={styles.channelList}>
           {this.renderChannelsHeader()}
           {this.renderChannels()}
